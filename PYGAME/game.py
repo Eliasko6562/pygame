@@ -1,4 +1,5 @@
 import pygame as pg
+from entities.player import Player
 
 from settings import WIDTH, HEIGHT, FPS
 
@@ -9,8 +10,13 @@ class Game:
         self.clock = pg.time.Clock()
         
         # ToDo: Inicializace skupiny objektu
+        self.all_sprites = pg.sprite.Group()
         
         # ToDo: Vytvoreni objektu hrace
+        self.player = Player(game=self, pos=(WIDTH / 2, HEIGHT / 2), size=(50, 50), color=(0, 255, 0))
+        self.all_sprites.add(self.player)
+        
+        # ToDo: Inicializace systemu vytvareni nepratel
         
         # Stav hry
         self.running = True
@@ -29,7 +35,9 @@ class Game:
                 self.running = False
 
     def update(self, dt):
-        pass
+        self.all_sprites.update(dt)
 
     def draw(self):
-        pass
+        self.screen.fill((30, 30, 30))  # Clear screen with dark gray
+        self.all_sprites.draw(self.screen)
+        pg.display.flip()
