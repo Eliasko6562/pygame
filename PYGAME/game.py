@@ -1,4 +1,6 @@
 import pygame as pg
+
+from systems.spawner import Spawner
 from entities.player import Player
 
 from settings import WIDTH, HEIGHT, FPS
@@ -17,6 +19,11 @@ class Game:
         self.all_sprites.add(self.player)
         
         # ToDo: Inicializace systemu vytvareni nepratel
+        self.enemies = pg.sprite.Group()
+        self.spawner = Spawner(self)
+        
+        #ToDo: Inicializace skupiny projektilu
+        self.bullets = pg.sprite.Group()
         
         # Stav hry
         self.running = True
@@ -28,14 +35,18 @@ class Game:
             self.handle_events()
             self.update(dt)
             self.draw()
-
+    
     def handle_events(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.running = False
+            elif event.type == pg.MOUSEBUTTONDOWN:
+                if event.button == 1:  # Left mouse button
+                    self.player.shoot()
 
     def update(self, dt):
         self.all_sprites.update(dt)
+        self.spawner.update(dt)
 
     def draw(self):
         self.screen.fill((30, 30, 30))  # Clear screen with dark gray
